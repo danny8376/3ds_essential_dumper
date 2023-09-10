@@ -4,7 +4,7 @@ consoles that have dead FCRAM / NAND and broken screen.
 
 ## General Info
 This program runs solely on ARM9 processor and only use ITCM/DTCM, thus should hopefully
-work on consoles that have dead FCRAM (and maybe even VRAM/ARM9 Memory?)
+work on consoles that have dead FCRAM (and maybe even VRAM/~~ARM9 Memory[^1]~~?)
 
 It'll try to dump all these files whenever possible:
 * OTP
@@ -42,3 +42,6 @@ under the terms of any later revisions of the GPL. Refer to the provided
 * **Jörg Mische**, for uidiv.S (__aeabi_uidiv) code
 * **Cha(N)**, **Kane49**, and all other FatFS contributors for FatFS
 * All **[3dbrew.org](https://www.3dbrew.org/wiki/Main_Page) editors**
+
+[^1]: Actually, bootrom won't be happy about bad ARM9 Memory, at least probably the first ~0x40 need to be working.
+
