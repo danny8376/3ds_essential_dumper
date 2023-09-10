@@ -17,17 +17,17 @@
 #include <stdlib.h>
 
 //#define TITLE_STRING ("===== 3ds_essential_dumper by DannyAAM - commit " COMMIT " =====\n")
-#define TITLE_STRING ("========\n")
+#define TITLE_STRING ("======\n")
 
-#define STR_FAILED "Failed! (%d)\n"
+#define STR_FAILED "Failed!(%d)\n"
 #define STR_DUMPING "Dumping %s...\n"
 #define STR_DUMPED "%s dumped\n"
 //#define STR_DUMPED_S "%s dumped (%u written)\n"
 //#define STR_CANT_READ "Can't read %s from NAND! (%d)\n"
-#define STR_CANT_READ "Can't read %s (%d)\n"
+#define STR_CANT_READ "Can't read %s!(%d)\n"
 //#define STR_CANT_CREATE "Failed to create %s on SD! (%d)\n"
-#define STR_CANT_CREATE "Can't create %s! (%d)\n"
-#define STR_DUMP_FAILED "Dump failed! (%d)\n"
+#define STR_CANT_CREATE "Can't create %s!(%d)\n"
+#define STR_DUMP_FAILED "Dump failed!(%d)\n"
 
 #define MAX_PATH 256
 
@@ -190,6 +190,7 @@ int main(/*int argc, char *argv[]*/) {
     UINT bw;
     FRESULT fres;
     int res;
+    u32 hid;
     char path[MAX_PATH];
 
     PXI_Reset();
@@ -257,11 +258,12 @@ int main(/*int argc, char *argv[]*/) {
     //mcuSetInfoLedPattern(64, 64, 64, 100, false);
     I2C_writeReg(I2C_DEV_CTR_MCU, 0x29, 6);
 
-    if (!(wait_any_key_pressed() & (BUTTON_B | BUTTON_Y))) {
+    hid = wait_any_key_pressed();
+    if (!(hid & (BUTTON_B | BUTTON_Y))) {
         //mcuSetInfoLedPattern(0, 0, 0, 0, false);
         I2C_writeReg(I2C_DEV_CTR_MCU, 0x29, 1);
 
-        nandDump(0, getMMCDevice(0)->total_size, "nand.bin", "Full NAND", false);
+        nandDump(0, getMMCDevice(0)->total_size, "nand.bin", "Full NAND", hid & (BUTTON_SELECT | BUTTON_START));
     }
 
     deinitLog();
