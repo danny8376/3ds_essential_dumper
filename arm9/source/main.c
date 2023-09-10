@@ -8,6 +8,7 @@
 #include "smalllib.h"
 #include "fatfs/ff.h"
 #include "fatfs/sdmmc.h"
+#include "futils.h"
 
 #include <power.h>
 #include <pxi.h>
@@ -30,8 +31,6 @@
 #define STR_CANT_CREATE "Can't create %s!(%d)\n"
 #define STR_DUMP_FAILED "Dump failed!(%d)\n"
 
-#define MAX_PATH 256
-
 #define GBUF_SZ   0x1000
 #define GBUF_SECS (GBUF_SZ / 0x200)
 u8 __attribute__((aligned(4))) gBuf[GBUF_SZ]; // 4KiB
@@ -42,40 +41,6 @@ static u32 wait_any_key_pressed()
     while (~HID_PAD & BUTTON_NONE);
     while (!((pad = ~HID_PAD) & BUTTON_NONE));
     return pad;
-}
-
-const char* joinStr(char* buf, int bufSize, ...) { // Add NULL at last for safety
-    int len = 0;
-    const char* path;
-    char* cbuf = buf;
-
-    va_list args;
-    va_start(args, bufSize);
-
-    while( ( path = va_arg(args, const char *) ) != NULL ) {
-        int plen = strlen(path);
-        if (len + plen >= bufSize) {
-            break;
-        } else {
-            memcpy(cbuf, path, plen);
-            len += plen;
-            cbuf += plen;
-        }
-    }
-
-    cbuf[0] = 0;
-
-    va_end(args);
-
-    return buf;
-}
-
-const char* rpath(char* buf, const char* file) {
-    return joinStr(buf, MAX_PATH, MAIN_PATH, file, NULL);
-}
-
-FRESULT f_ropen(FIL* fp, char* buf, const TCHAR* path, BYTE mode) {
-    return f_open(fp, rpath(buf, path), mode);
 }
 
 FRESULT fileCopy(const char *srcDir, const char *fn) {
