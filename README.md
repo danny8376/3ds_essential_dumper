@@ -1,10 +1,10 @@
 # 3ds_essential_dumper
-Tiny program for dumping essential files from 3DS console, which hopefully works on
+Tiny program for dumping essential files from 3DS console, which hopefully work on
 consoles that have dead FCRAM / NAND and broken screen.
 
 ## General Info
 This program runs solely on ARM9 processor and only use ITCM/DTCM, thus should hopefully
-works on consoles that have dead FCRAM (and maybe even VRAM/ARM9 Memory?)
+work on consoles that have dead FCRAM (and maybe even VRAM/ARM9 Memory?)
 
 It'll try to dump all these files whenever possible:
 * OTP
