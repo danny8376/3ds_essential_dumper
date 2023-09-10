@@ -22,11 +22,8 @@ Before dumping full NAND, it'll blink red power led (the same as low power indic
 you can press Y/B to cancel it, or any other button to continue dumping.
 
 ## To-Do List / Roadmap
-There're not much space left in ITCM, so we need to somehow shrink things to be able to fit
-anything more below :(
 * setupKeyslots on init
   - seems to be required if booting directly from ntrboot?
-* Proper title in log file
 
 ## How to Build This
 Building requires [firmtool](https://github.com/TuxSH/firmtool), and either 

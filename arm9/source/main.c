@@ -16,8 +16,7 @@
 
 #include <stdlib.h>
 
-//#define TITLE_STRING ("===== 3ds_essential_dumper by DannyAAM - commit " COMMIT " =====\n")
-#define TITLE_STRING ("======\n")
+#define TITLE_STRING ("===== 3ds_essential_dumper by DannyAAM - commit " COMMIT " =====\n")
 
 #define STR_FAILED "Failed!(%d)\n"
 #define STR_DUMPING "Dumping %s...\n"
