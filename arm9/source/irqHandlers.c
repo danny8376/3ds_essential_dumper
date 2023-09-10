@@ -6,13 +6,13 @@
 
 #include "irq.h"
 #include "log.h"
-#include "timer.h"
 
 #define PXICMD_QUEUE_LEN 64
 
 #define CIRC_INC(i) (((i) == (PXICMD_QUEUE_LEN - 1)) ? (0) : ((i) + 1))
 #define CIRC_DEC(i) (((i) == 0) ? (PXICMD_QUEUE_LEN - 1) : ((i) - 1))
 
+/*
 static u32 pxicmdQueue[PXICMD_QUEUE_LEN];
 
 static u32 pxicmdQueueFront = 0;
@@ -31,10 +31,12 @@ u32 dequeuePxicmd() {
 
     return pxicmdQueue[pxicmdQueueFront = CIRC_INC(pxicmdQueueFront)];
 }
+*/
 
 void irqHandlerMain(/*u32 lr*/) {
     //debugPrintf("Got IRQ; %x\n", lr);
 
+    /*
     if(testInterrupt(TIMER_INTERRUPT(0)))
         clearInterrupt(TIMER_INTERRUPT(0));
 
@@ -70,4 +72,5 @@ void irqHandlerMain(/*u32 lr*/) {
             //debugPrintf("Handled cmd %d\n", cmd);
         }
     }
+    */
 }

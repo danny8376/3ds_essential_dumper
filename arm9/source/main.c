@@ -2,7 +2,6 @@
 #include "hid.h"
 #include "log.h"
 #include "i2c.h"
-#include "timer.h"
 #include "irq.h"
 #include "irqHandlers.h"
 #include "smalllib.h"
@@ -169,7 +168,6 @@ int main(/*int argc, char *argv[]*/) {
     char path[MAX_PATH];
 
     PXI_Reset();
-    resetAllTimers();
     disableAllInterrupts();
     clearAllInterrupts();
 

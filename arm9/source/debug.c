@@ -17,7 +17,8 @@ void debugPrint(const char* str) {
     if (*str == '\0')
         return;
     //u32 irqState = ARM_EnterCritical();
-    logWrite(ARM9_DEBUG_PREFIX, sizeof(ARM9_DEBUG_PREFIX) - 1);
+    //logWrite(ARM9_DEBUG_PREFIX, sizeof(ARM9_DEBUG_PREFIX) - 1);
+    logWriteStr(ARM9_DEBUG_PREFIX);
     logWriteStr(str);
     //ARM_LeaveCritical(irqState);
 }
@@ -27,8 +28,8 @@ void logDebugPrintf(const char* format, ...) {
     va_list args;
     va_start(args, format);
 
-    logWrite(ARM9_DEBUG_PREFIX, sizeof(ARM9_DEBUG_PREFIX) - 1);
-
+    //logWrite(ARM9_DEBUG_PREFIX, sizeof(ARM9_DEBUG_PREFIX) - 1);
+    logWriteStr(ARM9_DEBUG_PREFIX);
     logWritevf(format, args);
 
     va_end(args);
