@@ -39,7 +39,7 @@ under the terms of any later revisions of the GPL. Refer to the provided
 `license.txt` file for further information.
 
 ## Credits
-* **aspargas2**, this whole repo is heavily based on [3ds_hw_test](https://github.com/aspargas2/3ds_hw_test)
+* **aspargas2**, this whole repo is heavily based on [3ds_hw_test](https://github.com/aspargas2/3ds_hw_test/commit/88d0c4be718fcf1ec69f272ad29301262a0c6b48)
 * **LumaTeam**, for crypto.c / diskio.c / sdmmc.c / mcuSetInfoLedPattern code, from (old) boot9strap code
 * **The Chromium OS Authors**, for thumb_case.S (__gnu_thumb1_case_uqi) code
 * **Jörg Mische**, for uidiv.S (__aeabi_uidiv) code
