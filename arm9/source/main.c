@@ -23,6 +23,7 @@
 #define STR_DUMPING "Dumping %s...\n"
 #define STR_DUMPED "%s dumped\n"
 //#define STR_DUMPED_S "%s dumped (%u written)\n"
+#define STR_MISSING_SKIP "%s missing!\n"
 //#define STR_CANT_READ "Can't read %s from NAND! (%d)\n"
 #define STR_CANT_READ "Can't read %s!(%d)\n"
 //#define STR_CANT_CREATE "Failed to create %s on SD! (%d)\n"
@@ -73,7 +74,7 @@ const char* rpath(char* buf, const char* file) {
     return joinStr(buf, MAX_PATH, MAIN_PATH, file, NULL);
 }
 
-FRESULT fileCopy(const char *srcDir, const char *fn, bool optional) {
+FRESULT fileCopy(const char *srcDir, const char *fn) {
     FIL src, dst;
     FRESULT res;
     char srcPath[MAX_PATH], dstPath[MAX_PATH];
@@ -85,8 +86,7 @@ FRESULT fileCopy(const char *srcDir, const char *fn, bool optional) {
 
     res = f_open(&src, srcPath, FA_READ);
     if (res != FR_OK) {
-        if (!optional)
-            logWritef(STR_CANT_READ, fn, res);
+        logWritef(res == FR_NO_FILE ? STR_MISSING_SKIP : STR_CANT_READ, fn, res);
         return res;
     }
 
@@ -131,6 +131,15 @@ FRESULT fileCopy(const char *srcDir, const char *fn, bool optional) {
 
     logWritef(STR_DUMPED, fn);
     return FR_OK;
+}
+
+//FRESULT filesCopy(const char *srcDir, const char *fn, char lastChr, int offset) {
+void filesCopy(const char *srcDir, const char *fn, char lastChr, int offset) {
+    char tfn[MAX_PATH];
+    int len = strlen(fn);
+    memcpy(tfn, fn, len + 1);
+    for(char *c = tfn + len - offset; *c <= lastChr; (*c)++)
+        fileCopy(srcDir, tfn);
 }
 
 FRESULT nandDump(u32 offset, u32 sectors, const char *fn, const char *dispName, bool ignoreNandFail) {
@@ -231,7 +240,7 @@ int main(/*int argc, char *argv[]*/) {
     nandDump(0, 1, "nand_hdr.bin", "NAND NCSD Header", false);
 
     res = sdmmc_nand_readsectors(1, 1, gBuf);
-    if (res != 0 && memcmp(gBuf, "nand_hdr", 8) == 0)
+    if (res == 0 && memcmp(gBuf, "nand_hdr", 8) == 0)
         nandDump(1, 17, "essential.exefs", "GM9 Essential", false);
 
     //setupKeyslots();
@@ -242,17 +251,11 @@ int main(/*int argc, char *argv[]*/) {
         //logWritef("Fail to mount NAND! (%d)\n", fres);
         logWritef(STR_FAILED, fres);
     } else {
-        fileCopy("1:/ro/sys/", "HWCAL0.dat", false);
-        fileCopy("1:/ro/sys/", "HWCAL1.dat", false);
+        filesCopy("1:/ro/sys/", "HWCAL0.dat", '1', 5);
+        filesCopy("1:/rw/sys/", "LocalFriendCodeSeed_A", 'B', 1);
+        filesCopy("1:/rw/sys/", "SecureInfo_A", 'C', 1);
 
-        fileCopy("1:/rw/sys/", "LocalFriendCodeSeed_A", false);
-        fileCopy("1:/rw/sys/", "LocalFriendCodeSeed_B", false);
-
-        fileCopy("1:/rw/sys/", "SecureInfo_A", false);
-        fileCopy("1:/rw/sys/", "SecureInfo_B", true);
-        fileCopy("1:/rw/sys/", "SecureInfo_C", true); // Probably not needed?
-
-        fileCopy("1:/private/", "movable.sed", false);
+        fileCopy("1:/private/", "movable.sed");
     }
 
     //mcuSetInfoLedPattern(64, 64, 64, 100, false);

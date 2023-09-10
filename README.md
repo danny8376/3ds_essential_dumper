@@ -22,7 +22,7 @@ Before dumping full NAND, it'll blink red power led (the same as low power indic
 you can press Y/B to cancel it, or any other button to continue dumping.
 
 ## To-Do List / Roadmap
-There're no space left in ITCM, so we need to somehow shrink things to be able to fit
+There're not much space left in ITCM, so we need to somehow shrink things to be able to fit
 anything more below :(
 * setupKeyslots on init
   - seems to be required if booting directly from ntrboot?
