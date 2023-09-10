@@ -74,6 +74,10 @@ const char* rpath(char* buf, const char* file) {
     return joinStr(buf, MAX_PATH, MAIN_PATH, file, NULL);
 }
 
+FRESULT f_ropen(FIL* fp, char* buf, const TCHAR* path, BYTE mode) {
+    return f_open(fp, rpath(buf, path), mode);
+}
+
 FRESULT fileCopy(const char *srcDir, const char *fn) {
     FIL src, dst;
     FRESULT res;
@@ -82,7 +86,6 @@ FRESULT fileCopy(const char *srcDir, const char *fn) {
     logWritef(STR_DUMPING, fn);
 
     joinStr(srcPath, MAX_PATH, srcDir, fn, NULL);
-    rpath(dstPath, fn);
 
     res = f_open(&src, srcPath, FA_READ);
     if (res != FR_OK) {
@@ -92,7 +95,7 @@ FRESULT fileCopy(const char *srcDir, const char *fn) {
 
     FSIZE_t rem = f_size(&src);
 
-    res = f_open(&dst, dstPath, FA_WRITE | FA_CREATE_ALWAYS);
+    res = f_ropen(&dst, dstPath, fn, FA_WRITE | FA_CREATE_ALWAYS);
     if (res != FR_OK) {
         f_close(&src);
         logWritef(STR_CANT_CREATE, dstPath, res);
@@ -150,9 +153,7 @@ FRESULT nandDump(u32 offset, u32 sectors, const char *fn, const char *dispName, 
 
     logWritef("Dumping %s (size %u)...\n", dispName, sectors * 0x200);
 
-    rpath(dstPath, fn);
-
-    fres = f_open(&dst, dstPath, FA_WRITE | FA_CREATE_ALWAYS);
+    fres = f_ropen(&dst, dstPath, fn, FA_WRITE | FA_CREATE_ALWAYS);
     if (fres != FR_OK) {
         logWritef(STR_CANT_READ, dstPath, fres);
         return fres;
@@ -215,7 +216,7 @@ int main(/*int argc, char *argv[]*/) {
     logWriteStr(TITLE_STRING);
 
     logWritef(STR_DUMPING, "OTP");
-    fres = f_open(&fp, rpath(path, "otp.bin"), FA_WRITE | FA_CREATE_ALWAYS);
+    fres = f_ropen(&fp, path, "otp.bin", FA_WRITE | FA_CREATE_ALWAYS);
     if (fres != FR_OK) {
         logWritef(STR_CANT_CREATE, path, fres);
     } else {
@@ -226,7 +227,7 @@ int main(/*int argc, char *argv[]*/) {
     }
 
     logWritef(STR_DUMPING, "NAND CID");
-    fres = f_open(&fp, rpath(path, "nand_cid.bin"), FA_WRITE | FA_CREATE_ALWAYS);
+    fres = f_ropen(&fp, path, "nand_cid.bin", FA_WRITE | FA_CREATE_ALWAYS);
     if (fres != FR_OK) {
         logWritef(STR_CANT_CREATE, path, fres);
     } else {
