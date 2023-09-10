@@ -41,6 +41,12 @@ void deinitLog() {
     f_unmount("0:");
 }
 
+void syncLog() {
+    u32 irqState = ARM_EnterCritical();
+    f_sync(&logfile);
+    ARM_LeaveCritical(irqState);
+}
+
 bool logWrite(const void* data, unsigned int btw) {
     if (!logready)
         return false;

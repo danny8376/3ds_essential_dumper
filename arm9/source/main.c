@@ -224,6 +224,8 @@ int main(/*int argc, char *argv[]*/) {
     //mcuSetInfoLedPattern(64, 64, 64, 100, false);
     I2C_writeReg(I2C_DEV_CTR_MCU, 0x29, 6);
 
+    syncLog();
+
     hid = wait_any_key_pressed();
     if (!(hid & (BUTTON_B | BUTTON_Y))) {
         //mcuSetInfoLedPattern(0, 0, 0, 0, false);

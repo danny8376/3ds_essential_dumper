@@ -8,6 +8,7 @@
 bool logReady();
 bool initLog();
 void deinitLog();
+void syncLog();
 
 bool logWrite(const void* data, unsigned int btw);
 bool logWriteStr(const char* str);
